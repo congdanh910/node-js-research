@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<!-- 	
+	This file is rendered by express.js, when the home url of the chat is opened in a browser.
+	It doesn't do much, except showing the create button for the chat.
+ -->
+
+<html>
+
+<head>
+
+    <title>Crawler DEMO </title>
+
+    <link type="text/css" rel="stylesheet" href="css/stylesheet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans Condensed:300italic,300,700" rel="stylesheet"
+          type="text/css">
+    <script language="javascript" type="text/javascript" src="js/jquery-1.11.2.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+<header class="homebanner">
+
+    <h1 class="homebannertext">WEB POST FINDER</h1>
+
+</header>
+
+<section>
+
+    <div class="homesection">
+
+        <div class="node">
+            <input type="text" id="path" class="form-control" placeholder="Please tell me the path to link web"
+                   style="margin: auto; width: 397px;"/>
+        </div>
+
+        <a title="Create" href="javascript:void(0);" id="crawlerbtn">
+            <div id="little">fetch posts from the site</div>
+            <div id="big">FIND NOW!!</div>
+        </a>
+    </div>
+    <div style="padding-left: 25%;" id="resultDiv"></div>
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#crawlerbtn').bind('click', function(e){
+            $('#resultDiv').html("Data is fetching...Plz wait");
+            $.getJSON('/crawler?path='+ $('#path').val(), function(result){
+                alert('success');
+                $('#resultDiv').html("");
+                var html = '';
+                for (var i = 0; i < result.keys.length; i++) {
+                    var htmlContent = '<div class="collapse" id="collapse'+ i +'">'+ result.values[i].bodyContent +'</div>';
+                    html += '<div><strong>' + result.keys[i] + '</strong><br>' +
+                            '<span class="text-muted" style=\"font-size:13px;\">' + result.values[i].bodySummary + '</span>' +
+                            '<a data-toggle="collapse" href="#collapse'+ i +'" aria-expanded="false" aria-controls="collapse'+ i +'" id="seeMore'+ i +'">See more</a>' +
+                            htmlContent + '</div>';
+                }
+                $('#resultDiv').append(html);
+            });
+            //e.preventDefault();
+        });
+    });
+</script>
+</body>
+</html>
